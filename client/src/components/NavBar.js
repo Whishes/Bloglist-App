@@ -1,8 +1,8 @@
-import React from "react"
-import { useDispatch, useSelector } from "react-redux"
-import { Link, useHistory } from "react-router-dom"
-import { logUser } from "../reducers/userReducer"
-import { errorMessage, successMessage } from "../reducers/notificationReducer"
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useHistory } from "react-router-dom";
+import { logUser } from "../reducers/userReducer";
+import { errorMessage, successMessage } from "../reducers/notificationReducer";
 import {
   AppBar,
   Button,
@@ -10,7 +10,7 @@ import {
   makeStyles,
   Toolbar,
   Typography,
-} from "@material-ui/core"
+} from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   "@global": {
@@ -32,26 +32,26 @@ const useStyles = makeStyles((theme) => ({
   toolbarTitle: {
     flexGrow: 1,
   },
-}))
+}));
 
 const NavBar = () => {
-  const classes = useStyles()
+  const classes = useStyles();
 
-  const dispatch = useDispatch()
-  const history = useHistory()
-  const loggedInUser = useSelector((state) => state.user)
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const loggedInUser = useSelector((state) => state.user);
 
   const handleLogOut = async (event) => {
-    event.preventDefault()
+    event.preventDefault();
     try {
-      window.localStorage.removeItem("loggedBlogappUser")
-      dispatch(logUser(null))
-      dispatch(successMessage("Successfully logged out"))
-      history.push("/")
+      window.localStorage.removeItem("loggedBlogappUser");
+      dispatch(logUser(null));
+      dispatch(successMessage("Successfully logged out"));
+      history.push("/");
     } catch (error) {
-      dispatch(errorMessage("User already logged out"))
+      dispatch(errorMessage("User already logged out"));
     }
-  }
+  };
 
   return (
     <>
@@ -76,7 +76,7 @@ const NavBar = () => {
 
               <nav>
                 <Button
-                  color="textPrimary"
+                  color="primary"
                   className={classes.link}
                   component={Link}
                   to="/users"
@@ -84,7 +84,7 @@ const NavBar = () => {
                   Users
                 </Button>
                 <Button
-                  color="textPrimary"
+                  color="primary"
                   className={classes.link}
                   component={Link}
                   to="/"
@@ -106,7 +106,7 @@ const NavBar = () => {
         </>
       ) : null}
     </>
-  )
-}
+  );
+};
 
-export default NavBar
+export default NavBar;
