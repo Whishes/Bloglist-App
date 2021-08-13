@@ -12,7 +12,7 @@ module.exports = {
     ecmaVersion: 2018,
     sourceType: "module",
   },
-  plugins: ["react", "cypress"],
+  plugins: ["react"],
   rules: {
     indent: ["warn", 2],
     quotes: ["warn", "double"],
