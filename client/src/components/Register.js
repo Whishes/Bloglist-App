@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import loginService from "../services/login";
-import { Link } from "react-router-dom";
-import blogService from "../services/blogs";
+import { useHistory, Link } from "react-router-dom";
+//import userService from "../services/users";
 import { successMessage, errorMessage } from "../reducers/notificationReducer";
-import { logUser } from "../reducers/userReducer";
+import { registerUser } from "../reducers/userReducer";
 import {
   TextField,
   Button,
@@ -28,30 +27,41 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  header: {
+    width: "100%",
+    display: "flex",
+    justifyContent: "space-between",
+  },
+  text: {
+    marginRight: "90px",
+  },
 }));
 
-const LoginForm = () => {
+const RegisterForm = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
   const dispatch = useDispatch();
   const classes = useStyles();
+  const history = useHistory();
 
-  const handleLogin = async (event) => {
+  const handleRegister = async (event) => {
     event.preventDefault();
     try {
-      const user = await loginService.login({
+      const user = {
         username,
+        name,
         password,
-      });
+      };
 
-      window.localStorage.setItem("loggedBlogappUser", JSON.stringify(user));
-      blogService.setToken(user.token);
-      dispatch(logUser(user));
+      console.log(user);
+      dispatch(registerUser(user));
       setUsername("");
       setPassword("");
-      dispatch(successMessage(`${user.name} logged in successfully`));
-    } catch (exception) {
-      dispatch(errorMessage(exception.response.data.error));
+      dispatch(successMessage(`${user.name} had registered successfully`));
+      history.push("/");
+    } catch (error) {
+      dispatch(errorMessage(error));
     }
   };
 
@@ -59,10 +69,26 @@ const LoginForm = () => {
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
-        <Typography component="h1" variant="h5">
-          Log in
-        </Typography>
-        <form className={classes.form} onSubmit={handleLogin}>
+        <div className={classes.header}>
+          <Button
+            id="backButton"
+            to="/"
+            variant="contained"
+            component={Link}
+            className={classes.button}
+          >
+            Back
+          </Button>
+          <Typography component="h1" variant="h5">
+            Register
+          </Typography>
+          <Typography
+            component="h1"
+            variant="h5"
+            className={classes.text}
+          ></Typography>
+        </div>
+        <form className={classes.form} onSubmit={handleRegister}>
           <TextField
             label="Username"
             type="username"
@@ -74,6 +100,18 @@ const LoginForm = () => {
             required
             fullWidth
             autoComplete="username"
+          />
+          <TextField
+            label="User's Name"
+            type="name"
+            value={name}
+            name="Name"
+            onChange={({ target }) => setName(target.value)}
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            autoComplete="Name"
           />
           <TextField
             label="Password"
@@ -88,23 +126,13 @@ const LoginForm = () => {
           />
           <Button
             id="registerButton"
-            to="/register"
-            variant="contained"
-            color="secondary"
-            component={Link}
-            fullWidth
-          >
-            register
-          </Button>
-          <Button
-            id="loginButton"
             type="submit"
             variant="contained"
             color="primary"
             fullWidth
             className={classes.submit}
           >
-            login
+            Register
           </Button>
         </form>
       </div>
@@ -112,4 +140,4 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm;
+export default RegisterForm;
